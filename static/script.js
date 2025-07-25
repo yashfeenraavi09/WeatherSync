@@ -23,7 +23,6 @@ async function success(position) {
             throw new Error("Malformed weather data");
         }
 
-        // Forecast table
         const forecastTable = `
             <h4 class="mt-4 mb-3">Next 24 Hours Forecast</h4>
             <div class="table-responsive">
@@ -51,7 +50,6 @@ async function success(position) {
             </div>
         `;
 
-        // Main weather summary
         weatherInfo.innerHTML = `
             <h3 class="mb-3 fw-semibold">${data.location}</h3>
             <img src="${data.icon}" class="weather-icon mb-3" />
@@ -62,25 +60,21 @@ async function success(position) {
             ${forecastTable}
         `;
 
-        // Send notification
         sendNotification(data.condition, data.temp);
 
     } catch (err) {
-        console.error("Error fetching weather:", err);
         weatherInfo.innerHTML = `<p class="text-danger">Unable to retrieve weather data. Please try again later.</p>`;
     }
 }
 
-function error() {
-    alert("Unable to retrieve your location.");
+function error(err) {
+    alert(`Location error: ${err.message}`);
 }
 
-// 🔔 Request Notification Permission
 function requestNotificationPermission() {
     if ("Notification" in window) {
         Notification.requestPermission().then(permission => {
             if (permission === "granted") {
-                console.log("Notification permission granted.");
             }
         });
     }
@@ -106,6 +100,4 @@ function sendNotification(condition, temp) {
     }
 }
 
-
-// Run on load
 document.addEventListener("DOMContentLoaded", requestNotificationPermission);
